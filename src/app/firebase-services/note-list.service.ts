@@ -8,40 +8,40 @@ import { Note } from '../interfaces/note.interface';
   providedIn: 'root'
 })
 export class NoteListService {
-
+  trashNotes: Note[] = [];
+  normalNotes: Note[] = []
   firestore: Firestore = inject(Firestore);
-  items$;
-  items;
-  unsubList;
+  unsubNotes;
+  unsubTrash;
 
   constructor() { 
-    this.unsubList = onSnapshot(this.getNotesRef(), (list) =>{
-      list.forEach(element =>{
-        console.log(this.setNoteObject(element.data(), element.id));
-        console.log(element.data());
-      })
-    })
-
-
-
-
-
-
-    this.items$ = collectionData(this.getNotesRef());
-    this.items = this.items$.subscribe( (list) => {
-      list.forEach(element => {
-        console.log(element)
-      });
-    } );
+    this.unsubTrash = this.subTrashList();
+    this.unsubNotes = this.subNotesList();
     
   }
 
   ngonDestroy(){
-    this.items.unsubscribe();
-    this.unsubList();
+    this.unsubTrash();
+    this.unsubNotes();
   }
 
-  //const itemCollection = collection(this.firestore, 'items');
+  subNotesList(){
+    return onSnapshot(this.getNotesRef(), (list) =>{
+      this.normalNotes = [];
+      list.forEach(element =>{
+        this.normalNotes.push(this.setNoteObject(element.data(), element.id));
+      })
+    })
+  }
+
+  subTrashList(){
+    return onSnapshot(this.getTrashRef(), (list) =>{
+      this.trashNotes = [];
+      list.forEach(element =>{
+        this.trashNotes.push(this.setNoteObject(element.data(), element.id));
+      })
+    })
+  }
 
   getNotesRef(){
     return collection(this.firestore, 'notes');
