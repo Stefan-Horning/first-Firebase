@@ -59,7 +59,7 @@ export class NoteListService {
     return {
       id:id,
       type: obj.type || "",
-      titel: obj.titel || "",
+      title: obj.title || "",
       content: obj.content || "",
       marked: obj.marked || false,
     }
