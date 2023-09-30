@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import { Firestore, collection, doc, collectionData, onSnapshot,addDoc, updateDoc, } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, onSnapshot,addDoc, } from '@angular/fire/firestore';
+import { doc, updateDoc } from "firebase/firestore";
 import { Observable } from 'rxjs';
 import { Note } from '../interfaces/note.interface';
 
@@ -30,7 +31,7 @@ export class NoteListService {
   }
 
   getCleanJson(note :Note): {} {
-    debugger;
+
     return {
       type: note.type,
       title: note.title,
@@ -41,7 +42,7 @@ export class NoteListService {
 
   getColIdFromNote(note:Note){
     if(note.type == 'note'){
-      return 'note';
+      return 'notes';
     }else{
       return 'trash';
     }
